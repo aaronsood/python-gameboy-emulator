@@ -1,7 +1,7 @@
 class Registers:
     def __init__(self):
         self._AF = 0x01B0
-        self._BC = 0x0013
+        self._BC = 0x1234
         self._DE = 0x00D8
         self._HL = 0x014D
         self.SP = 0xFFFE
