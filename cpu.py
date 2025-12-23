@@ -12,7 +12,7 @@ class CPU:
     
     def fetch_byte(self):
         # read byte from memory at pc and increment pc
-        pc = self.reg.pc
+        pc = self.reg.PC
         val = self.mem.read(pc)
         self.reg.PC += 1
         return val
