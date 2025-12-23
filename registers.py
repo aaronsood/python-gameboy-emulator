@@ -31,6 +31,12 @@ class Registers:
     def BC(self, value):
         self._BC = ((value & 0xFF) << 8) | (self._BC & 0xFF)
     @property
+    def B(self):
+        return(self._BC >> 8) & 0xFF
+    @B.setter
+    def B(self, value):
+        self._BC = ((value & 0xFF) << 8) | (self._BC & 0xFF)
+    @property
     def C(self):
         return self._BC & 0xFF
     @C.setter
