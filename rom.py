@@ -1,3 +1,4 @@
+# coded by aaronsood
 class ROM:
     def __init__(self, path):
         with open (path, "rb") as f:
