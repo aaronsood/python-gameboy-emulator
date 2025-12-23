@@ -24,6 +24,23 @@ class CPU:
         # for now, just handle nop (0x00)
         if opcode == 0x00:
             pass # do nothing
+        
+        # handle LD r,r (just a few examples for now)
+        elif opcode == 0x78: # LD A,B
+            self.reg.A = self.reg.B
+        elif opcode == 0x79: # LD A,C
+            self.reg.A = self.reg.C
+        elif opcode == 0x7A: # LD A,D
+            self.reg.A = self.reg.D
+        elif opcode == 0x7B: # LD A,E
+            self.reg.A = self.reg.E
+        elif opcode == 0x7C: # LD A,H
+            self.reg.A = self.reg.H
+        elif opcode == 0x7D: # LD A,L
+            self.reg.A = self.reg.L
+        elif opcode == 0x7F: # LD A,A
+            self.reg.A = self.reg.A
+        
         else:
-            # simple placeholder for unimplemented opcodes
-            print(f"opcode {hex(opcode)} not implemented yet")
+            # placeholder for unimplemented opcodes
+            print(f"Opcode {hex(opcode)} not implemented yet")
