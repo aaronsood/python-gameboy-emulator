@@ -17,30 +17,33 @@ class CPU:
         self.reg.PC += 1
         return val
     
-    # placeholder for instruction execution
     def execute_next(self):
-    # fetch opcode
+        # fetch opcode
         opcode = self.fetch_byte()
-        # for now, just handle nop (0x00)
+
+        # handle NOP
         if opcode == 0x00:
-            pass # do nothing
+            return
         
-        # handle LD r,r (just a few examples for now)
-        elif opcode == 0x78: # LD A,B
-            self.reg.A = self.reg.B
-        elif opcode == 0x79: # LD A,C
-            self.reg.A = self.reg.C
-        elif opcode == 0x7A: # LD A,D
-            self.reg.A = self.reg.D
-        elif opcode == 0x7B: # LD A,E
-            self.reg.A = self.reg.E
-        elif opcode == 0x7C: # LD A,H
-            self.reg.A = self.reg.H
-        elif opcode == 0x7D: # LD A,L
-            self.reg.A = self.reg.L
-        elif opcode == 0x7F: # LD A,A
-            self.reg.A = self.reg.A
+        # handle LD A,r 
+        ld_map = {
+            0x78: "B",
+            0x79: "C",
+            0x7A: "D",
+            0x7B: "E",
+            0x7C: "H",
+            0x7D: "L",
+            0x7F: "A",
+        }
+
+        if opcode in ld_map:
+            src = ld_map[opcode]
+            val = getattr(self.reg, src)
+            # optional debug print
+            print(f"Before execute: PC={self.reg.PC-1:#04x}, {src}={val:#02x}, A={self.reg.A:#02X}")
+            self.reg.A = val
+            print(f"After execute: PC={self.reg.PC:#04x}, {src}={getattr(self.reg, src):#02x}, A={self.reg.A:#02X}")
+            return
         
-        else:
-            # placeholder for unimplemented opcodes
-            print(f"Opcode {hex(opcode)} not implemented yet")
+        # placeholder for unimplemented opcodes 
+        print(f"Opcode {hex(opcode)} not implemented yet")
