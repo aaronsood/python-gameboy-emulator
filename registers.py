@@ -1,18 +1,17 @@
 class Registers:
         def __init__(self):
-            # 16-bit regs, some default gameboy startup values
-            self._AF = 0x01B0 # A = 0x01, F = 0xB0
-            self._BC = 0x1234
-            self._DE = 0x00D8
-            self._HL = 0x014D
-            self.SP = 0xFFFE
-            self.PC = 0x0100
+         self.A = 0
+         self.F = 0
+         self.B = 0
+         self.C = 0
+         self.D = 0
+         self.E = 0
+         self.H = 0
+         self.L = 0
+         self.SP = 0
+         self.PC = 0
 
-        # optional debug hook
-            self.debug = False
-
-        #AF registers and flags
-
+        # 16-bit combined registers
         @property
         def AF(self):
             return self._AF
@@ -22,25 +21,7 @@ class Registers:
             if self.debug: print("Setting AF", hex(val))
             self._AF = val & 0xFFFF   
 
-        @property
-        def A(self):
-            return (self._AF >> 8) & 0xFF
-        
-        @A.setter
-        def A(self, val): 
-            self._AF = ((val & 0xFF) << 8) | (self._AF & 0xFF)
-
-        @property
-        def F(self):
-            # only upper 4 bits are flags, lower 4 ignored
-            return self._AF & 0xF0
-        
-        @F.setter
-        def F(self, val):
-            self._AF = (self._AF & 0xFF00) | (val & 0xF0)
-
         #BC register
-
         @property
         def BC(self):
             return self._BC
@@ -51,27 +32,7 @@ class Registers:
             self._BC = tmp
             if self.debug: print("BC set to", hex(self._BC))
 
-        @property
-        def B(self):
-            b_val = (self._BC >> 8) & 0xFF
-            return b_val
-        
-        @B.setter
-        def B(self, val):
-            c_reg = self.BC & 0xFF
-            self._BC = ((val & 0xFF) << 8) | (self._BC & 0xFF)
-
-        @property
-        def C(self):
-            return self._BC & 0xFF
-        
-        @C.setter
-        def C(self, val):   
-            b_val = self._BC >> 8
-            self._BC = (b_val << 8) | (val & 0xFF)
-
         #DE register
-
         @property
         def DE(self):
             return self._DE
@@ -80,25 +41,7 @@ class Registers:
         def DE(self, val):
             self._DE = val & 0xFFFF
 
-        @property
-        def D(self):
-            return (self._DE >> 8) & 0xFF
-        
-        @D.setter
-        def D(self, val):
-            self._DE = ((val & 0xFF) << 8) | (self._DE & 0xFF)
-
-        @property
-        def E(self):
-            return self._DE & 0xFF
-        
-        @E.setter
-        def E(self, val):
-            d_high = self._DE >> 8
-            self._DE = (d_high << 8) | (val & 0xFF)
-
         # HL register
-
         @property
         def HL(self):
             return self._HL
@@ -107,20 +50,35 @@ class Registers:
         def HL (self, val):
             self._HL = val & 0xFFFF    
 
+        # flag helpers (z n h c)
         @property
-        def H(self):
-            return (self._HL >> 8) & 0xFF
+        def Z(self):
+            return (self.F >> 7) & 1
         
-        @H.setter
-        def H(self, val):
-            l_val = self.HL & 0xFF
-            self._HL = ((val & 0xFF) << 8) | l_val
+        @Z.setter
+        def Z(self, v):
+            self.F = (self.F & ~(1 << 7)) | ((v & 1) << 7)
 
         @property
-        def L(self):
-            return self._HL & 0xFF
+        def N(self):
+            return (self.F >> 6) & 1
         
-        @L.setter
-        def L(self, val):
-            h_val = self._HL >> 8
-            self._HL = (h_val << 8) | (val & 0xFF)
+        @N.setter 
+        def N(self, v):
+            self.F = (self.F & ~(1 << 6)) | ((v & 1) << 6)
+        
+        @property
+        def H(self):
+            return (self.F >> 5) & 1
+        
+        @H.setter
+        def H(self,v):
+            self.F = (self.F & ~(1 << 5)) | ((v & 1) << 5)  
+
+        @property
+        def Cflag(self):
+            return (self.F >> 4) & 1
+        
+        @Cflag.setter
+        def Cflag (self, v):
+            self.F = (self.F & ~(1 << 4)) | ((v & 1) << 4)
