@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from rom import ROM
 # simple test to check rom loading and header values
-rom = ROM("tests/cpu_instrs.gb")
+rom = ROM("tests/tetris.gb")
 
 print("ROM title:", rom.title)
 print("Cartridge type:", rom.cartridge_type)

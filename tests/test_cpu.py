@@ -10,7 +10,7 @@ from registers import Registers
 from cpu import CPU
 
 # setup rom, memory, registers, cpu
-rom = ROM(r"tests\cpu_instrs.gb")
+rom = ROM(r"tests\tetris.gb")
 mem = Memory(rom)
 reg = Registers()
 cpu = CPU(mem)
