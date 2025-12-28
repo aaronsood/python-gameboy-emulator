@@ -23,7 +23,7 @@ BUTTONS = {
 
 def poll_input(memory):
     # 0 means pressed 1 = released
-    pygame.event.pump
+    pygame.event.pump()
     keys = pygame.key.get_pressed()
 
     for key, name in KEY_MAP.items():
@@ -31,22 +31,16 @@ def poll_input(memory):
 
     joyp = memory.read(0xFF00)
 
-    select_dpad = not (joyp & 0x10)
-    select_buttons = not (joyp & 0x20)
+    select_buttons = (joyp & 0x10) == 0 
+    select_dpad = (joyp & 0x20) == 0
     
 
-    val = 0xFF
-
+    val = (joyp & 0xF0) | 0x0F
     if select_dpad:
-        val &= ~(BUTTONS['RIGHT'] << 0)
-        val &= ~(BUTTONS['LEFT'] << 1)
-        val &= ~(BUTTONS['UP'] << 2)
-        val &= ~(BUTTONS['DOWN'] << 3)
+       val = (val & 0xF0) | ((BUTTONS['DOWN'] << 3) | (BUTTONS['UP'] << 2) | (BUTTONS['LEFT'] << 1) | (BUTTONS['RIGHT'] << 0))
 
     if select_buttons:
-        val &= ~(BUTTONS['A'] << 0)
-        val &= ~(BUTTONS['B'] << 1)
-        val &= ~(BUTTONS['SELECT'] << 2)
-        val &= ~(BUTTONS['START'] << 3)
+       val = (val & 0xF0) | ((BUTTONS['START'] << 3) | (BUTTONS['SELECT'] << 2) | (BUTTONS['B'] << 1) | (BUTTONS['A'] << 0))
+
     
     memory.write(0xFF00, val)
